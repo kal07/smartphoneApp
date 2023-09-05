@@ -1,0 +1,132 @@
+{
+  "homeMobile":{
+    "mess_welcome":  "J'ai besoin d'une photo d'identité pour",
+    "take_photo": "Faire une photo",
+    "choose_country": "Choisir un pays",
+    "choose_document": "Choisir un document"
+
+  },
+  "headerMobile": {
+    "mess_alert1": "Les gouvernements exigent que la photo soit récente. Avec Smartphone iD, vous pouvez prouver la date et l'heure de la photo prise.",
+    "continue": "Continuer",
+    "tips_title": "Make sure your photo is valid!",
+    "close": "Close",
+    "title_1": "Ligth fall evenly on your face",
+    "text_1": "Make sure the area where you take the photo is well-lit, preferably with natural light. Avoid using the flash as it can cause harsh shadows or reflections.",
+    "title_2": "Hair behind shoulders",
+    "text_2": "By placing your hair behind your shoulders, you make sure that they don't cover your ears and face.",
+    "title_3": "No glasses",
+    "text_3": "It's very hard to get a successful biometric passport photo with glasses therefore most government institutions either forbid wearing glasses or request a special justification from a doctor.",
+    "title_4": "Neutral face expression",
+    "text_4": "Government institutions don't allow smiling because it distorts the natural look necessary for automated facial biometric recognition.",
+    "title_5": "Mouth closed",
+    "text_5": "Partially open mouth is allowed for babies, but no tongue and teeth can be seen.",
+    "title_6": "Eyes looking into camera",
+    "text_6": "Make sure to look at the camera objective of your phone, and not at the phone screen.",
+    "title_7": "Head is straight",
+    "text_7": "Make sure your head is not tilted towards one side/raised too high/bent too low. Your face should be also directly facing the phone screen.",
+    "title_8": "Arm fully extended, in case of selfie",
+    "text_8": "The frontal camera tends to distort face parts if it is too close. Also, make sure that your arm is not visible."
+  },
+  "photoShootMobile":{
+    "waiting_authorization": ".....................................................",
+    "take_photo_mobile": "Looking good?",
+    "start_order": "Start Order",
+    "take_photo": "Faire une photo",
+    "continue": "Continuer"
+  },
+  "yourPlan" : {
+    "title": "This plan includes all mandatory features for official authorities to accept your photo.",
+    "feature" : "What features are included ?",
+    "Compliance_guarantee" : "Compliance guarantee",
+    "Background_removal" :"Background removal",
+    "Photo_check_by_trained_expert" :"Photo check by trained expert",
+    "Adjustments" :"Adjustments(lighting,sharpness...)",
+    "Receive_in_exact_format" :" Receive in exact format",
+    "Receive_immediately_in_e-mail" :"Receive immediately in e-mail",
+    "Some_great_feature" :"Some great feature",
+    "Another_great_feature" :"Another great feature",
+    "view_all" :"view all",
+    "proceed_price" :"Proceed"
+  },
+  "ChoosePlan" : {
+    "title" : "Sélectionnez le plan",
+    "Gratuit" :"Gratuit",
+    "feature" :"Features",
+    "Contrôle_photo" :"Contrôle photo par un expert qualifié",
+    "Suppression" :"Suppression de l'arriére-plan",
+    "Garantie" :"Garantie de conformité",
+    "Ajustement" :"Ajustement (éclairage, contraste...)",
+    "Receive_immediately_in_e-mail" :"Receive immediately in e-mail",
+    "Some_great_feature" :"Some great feature",
+    "Another_great_feature" :"Another great feature",
+    "Print_order" :"Print order option(additional cost)",
+    "view_all" :"view all",
+    "button" :"Select Plan to Order",
+    "basique" :"BASIQUE",
+    "best_choice" :"MEILLEURE CHOIX"
+  },
+  "BravoApp" : {
+    "felicitation" :"BRAVO !",
+    "text" :"Vous avez terminé la commande avec succès ! Nous avons envoyé un e-mail de confirmation avec les détails de la commande et du paiement à",
+    "down":"Vous pouvez téléchargé l'application SMARTPHONE iD pour suivre votre commande.",
+    "spams":"Please check spam if you cannot find our email",
+    "rappel":"Your photo will be sent to your email within .. minutes"
+  },
+  "AddressLivraison" : {
+    "title":"Screen to enter delivery address",
+    "firstname" :"Nom",
+    "lastname" :"Prénom",
+    "boite" :"Nom sur la boite a lettre",
+    "address" :"Adresse",
+    "addressCompl" :"Complément adresse",
+    "code_postal" :"Code postal",
+    "ville": "Ville",
+    "city": "Région",
+    "country": "Pays",
+    "info" :"Informations sécurisées RGPD",
+    "button" :"Proceed"
+    
+  },
+  "SignatureMob" : {
+    "title":"Signez avec votre doigt à l'intérieur du cadre",
+    "send":"Envoyer",
+    "clean":"Effacer",
+    "back":" Retour",
+    "wait":"Veuillez patienter"
+  },
+  "EmailApp" : {
+    "title":"Which email should we send the photo to?",
+    "email_address":"Email address",
+    "email_confirmation":"Confirm email address",
+    "next":"Continuer"
+  },
+  "yourOrderDetailMobile": {
+    "title": "Order Cart",
+    "sous_title1": "Basic Pro",
+    "sous_title2": "Basic Plan",
+    "sous_title3": "Verified photo",
+    "sous_title4": "Quality print",
+    "sous_title5": "ePhoto code",
+    "sous_title6": "unverified photo",
+    "codePromo": "Have a discount code?",
+    "apply": "Apply",
+    "reduction": "Réduction",
+    "control": "Control",
+    "total": "Total",
+    "pay": "Pay with card",
+    "codePromoError": "The discount code is not valid. Please verify the code or use a different code"
+  },
+  "printedCopy": {
+    "title": "Add a printed copy?",
+    "copy": "/ per copy",
+    "photoQualityPrint": "Photo-quality print",
+    "guarantee": "Print acceptance guaranteed",
+    "delivered": "Delivered to your doorstep",
+    "proceed": "Proceed",
+    "card": "Card of",
+    "photo": "photos",
+    "mesure": "mm each",
+    "printedEphoto": "and printed ephotoCode"
+  }
+}
