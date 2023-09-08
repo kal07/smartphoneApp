@@ -43,7 +43,6 @@ const formattedRU = formatter(ru)
 const formattedTR = formatter(tr)
 const formattedEN = formatter(en)
 
-console.log(formattedFR)
 export const defaultLocal = () => {
   const local = localStorage.getItem("local") || navigator.language
   if (local.includes("-")) return local.split(/[-_]/)[0]

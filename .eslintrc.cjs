@@ -18,7 +18,9 @@ module.exports = {
     ],
     // "tailwindcss/no-custom-classname": "off",
     // "tailwindcss/classnames-order": "error",
-    "@typescript-eslint/ban-ts-comment": "warn"
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "@typescript-eslint/no-explicit-any": "off"
+
 
   },
   settings: {
