@@ -37,13 +37,7 @@ export function Step3() {
   return (
     <div className="flex grow gap-5">
       <div className="flex-1">
-        <h1 className="mb-8 text-2xl font-bold">
-          Quelle planche imprimée souhaitez-vous commander ?
-        </h1>
-        <div className="flex flex-col gap-5">
-          <Planche />
-          <Planche />
-        </div>
+        <PlancheContainer />
       </div>
       <div className="flex-[2]">
         <h1 className="mb-8 text-2xl font-bold">Votre adresse de livraison</h1>
@@ -212,6 +206,21 @@ export function Step3() {
         </div>
       </div>
     </div>
+  )
+}
+
+const PlancheContainer = () => {
+  const intl = useIntl()
+  return (
+    <>
+      <h1 className="mb-8 text-2xl font-bold">
+        {intl.formatMessage({id:"Desktop.printedCopyDesktop.which_template"})}
+      </h1>
+      <div className="flex flex-col gap-5">
+        <Planche />
+        <Planche />
+      </div>
+    </>
   )
 }
 

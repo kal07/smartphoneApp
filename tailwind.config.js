@@ -75,7 +75,7 @@ module.exports = {
       },
       backgroundImage: {
         img: "url('/image/bg.png')",
-        smartphone: "url('/image/smartphone.png')",
+        phone: "url('/image/phone.png')",
       },
     },
   },

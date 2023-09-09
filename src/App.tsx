@@ -9,9 +9,11 @@ import { useLanguage } from "./context/useLanguage"
 import { messages } from "./lib/intl"
 import { Congrat } from "./pages/desktop/Congrat"
 import { Step1 } from "./pages/desktop/Step1"
-import { Step1TakePhoto } from "./pages/desktop/Step1.takePhoto"
+import { Step1TakePhoto } from "./pages/desktop/OLDStep1.takePhoto"
 import { Step2 } from "./pages/desktop/Step2"
 import { Step3 } from "./pages/desktop/Step3"
+import MobileStep1 from "./pages/mobile/step1"
+import MobileStep2 from "./pages/mobile/step2"
 import { Test } from "./pages/test"
 
 const router = createBrowserRouter([
@@ -40,6 +42,15 @@ const router = createBrowserRouter([
         path: "desktop/photo/:price_id/:country_destination/:qrcode_uid/step3",
         element: <Step3 />,
       },
+
+      {
+        path: "mobile/photo/:price_id/:country_destination",
+        element: <MobileStep1 />,
+      },
+      {
+        path: "mobile/photo/:price_id/:country_destination/step2",
+        element: <MobileStep2 />,
+      },
     ],
   },
   {
@@ -67,7 +78,8 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       refetchInterval: 1000 * 60 * 60,
-      staleTime: 1000 * 60 * 60,
+      // staleTime: 1000 * 60 * 60,
+      staleTime: Infinity,
     },
   },
 })
@@ -81,7 +93,7 @@ export default function App() {
       className=" flex min-h-screen flex-col "
     >
       <QueryClientProvider client={queryClient}>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <ReactQueryDevtools initialIsOpen={false} />
 
         <IntlProvider
           locale={language}

@@ -1,5 +1,11 @@
+import React from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useQuery } from "@tanstack/react-query"
 import { ChevronDown } from "lucide-react"
+import { useForm } from "react-hook-form"
 import { useIntl } from "react-intl"
+import { useParams } from "react-router-dom"
+import { z } from "zod"
 
 import greenCheck from "@/assets/check-round-green.svg"
 import whiteCheck from "@/assets/check-white.svg"
@@ -15,30 +21,101 @@ import {
 } from "@/components/ui/collapsible"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { useStep } from "@/context/useStep"
 import { usePrice } from "@/hooks/usePrice"
-import { useShowPurpose } from "@/hooks/useShowPurpose"
 import { cn } from "@/lib/utils"
 
+const schema = z
+  .object({
+    email: z.string().email(),
+    confirmEmail: z.string().email(),
+    offer: z.string(),
+    proPapper: z.boolean(),
+  })
+  .refine(({ email, confirmEmail }) => email === confirmEmail, {
+    //TODO translate this
+    message: "email don't match",
+    path: ["confirmEmail"],
+  })
+  
+const offer = [
+  {
+    title: "basic",
+    text: "free",
+    icon: freeIcon,
+  },
+  { title: "best choice", text: "paid", icon: bestIcon },
+]
+
 export function Step2() {
-  const purpose = useShowPurpose()
+  const { qrcode_uid, price_id } = useParams()
+
+  const setStep = useStep((state) => state.setStep)
+  React.useEffect(() => {
+    setStep(2)
+  }, [setStep])
+
+  const qrcode = useQuery({
+    queryKey: ["qrcodeConsumed"],
+    queryFn: async () => {
+      const res = await fetch(
+        `https://smartphoneid-api--test-2yx5ebbula-ew.a.run.app/service/qrcode-consumed/${qrcode_uid}`
+      ).then((res) => res.json())
+      return res
+    },
+    enabled: !!qrcode_uid,
+  })
+
+  const planche = useQuery({
+    queryKey: ["planche"],
+    queryFn: async () => {
+      const formData = new FormData()
+      formData.append("photoUid", qrcode.data?.photo?.uid)
+      formData.append("priceId", price_id as string)
+      qrcode.data?.signature?.uid &&
+        formData.append("signatureUid", qrcode.data?.signature?.uid)
+
+      const res = await fetch(
+        `https://smartphoneid-api--test-2yx5ebbula-ew.a.run.app/purpose/show-purpose-spec`,
+        { method: "post", body: formData }
+      ).then((res) => res.json())
+      const formattedRes = Object.entries(res).map(
+        (v) => "data:image/jpeg;base64," + (v[1] as any).base64
+      )
+      return formattedRes
+    },
+    enabled: !!qrcode_uid && !!qrcode.data?.photo?.uid,
+  })
+
+  const { data } = usePrice()
+
+  const form = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: "",
+      confirmEmail: "",
+      offer: offer[1].text,
+      proPapper: false,
+    },
+  })
 
   return (
     <>
       <div className="flex flex-1 flex-col gap-6">
-        <Offer />
-        {purpose.data &&
-          purpose.data?.map((v) => <Photo key={v} preview={v} />)}
+        <Offer data={data} />
+        {planche.data &&
+          planche.data?.map((v) => <Photo key={v} preview={v} />)}
         <PhotoInfo />
       </div>
       <div className="flex-1">
-        <SideInfo />
+        <SideInfo form={form} />
       </div>
     </>
   )
 }
 
-const Offer = () => {
-  const { data } = usePrice()
+const Offer = ({ data }: { data: any }) => {
+  // const intl = useIntl()
   return (
     <div className=" flex w-fit gap-5 rounded-xl border bg-white p-4">
       <div className="flex min-w-[150px] items-center  gap-4">
@@ -70,7 +147,7 @@ const PhotoInfo = () => {
       <img src={info} alt="" />
       <p>
         {intl.formatMessage({
-          id: "Desktop.validateDesktop.info_preview",
+          id: "Ceci n’est qu’un aperçu de vos photos après traitement automatique.",
         })}
       </p>
     </div>
@@ -81,18 +158,13 @@ const Photo = ({ preview }) => (
   <img src={preview} alt="" className="rounded-2xl" />
 )
 
-const offer = [
-  {
-    title: "basic",
-    text: "free",
-    icon: freeIcon,
-  },
-  { title: "best choice", text: "paid", icon: bestIcon },
-]
-const SideInfo = () => {
+const SideInfo = ({ form }) => {
   const intl = useIntl()
   const items1 = ["step2.items1.1", "step2.items1.2"]
-
+  const offerWatch = form.watch("offer")
+  const selectOffer = (off: (typeof offer)[number]) => () => {
+    form.setValue("offer", off.text)
+  }
   return (
     <div className="rounded-2xl bg-[#EFEFEF] p-8">
       <h1 className=" mb-4 text-2xl font-bold">
@@ -112,6 +184,7 @@ const SideInfo = () => {
         <div className="flex-1">
           <p>email</p>
           <Input
+            {...form.register("email")}
             placeholder="johndoe@gmail.com"
             className="bg-transparent focus-within:border-primary focus-visible:ring-0 focus-visible:ring-offset-0"
           />
@@ -119,6 +192,7 @@ const SideInfo = () => {
         <div className="flex-1">
           <p>confirmEmail</p>
           <Input
+            {...form.register("confirmEmail")}
             placeholder="johndoe@gmail.com"
             className="bg-transparent focus-within:border-primary focus-visible:ring-0 focus-visible:ring-offset-0"
           />
@@ -129,23 +203,23 @@ const SideInfo = () => {
         {offer.map((off) => (
           <div
             className={cn(
-              "flex w-40 cursor-pointer flex-col overflow-hidden rounded-lg border text-center"
-              // offerWatch === off.text && "border-primary"
+              "flex w-40 cursor-pointer flex-col overflow-hidden rounded-lg border text-center",
+              offerWatch === off.text && "border-primary"
             )}
-            // onClick={selectOffer(off)}
+            onClick={selectOffer(off)}
           >
             <div
               className={cn(
-                "bg-slate-400 p-1 text-white"
-                // offerWatch === off.text && "bg-black"
+                "bg-slate-400 p-1 text-white",
+                offerWatch === off.text && "bg-black"
               )}
             >
               {intl.formatMessage({ id: off.title })}
             </div>
             <div
               className={cn(
-                "flex items-center justify-center gap-4 p-4"
-                // offerWatch === off.text && "bg-white"
+                "flex items-center justify-center gap-4 p-4",
+                offerWatch === off.text && "bg-white"
               )}
             >
               <img src={off.icon} alt="" />
@@ -182,7 +256,7 @@ const SideInfo = () => {
                 })}
               </p>
               <div className=" flex w-fit items-center gap-4 rounded-xl border border-black px-4 py-3">
-                <Checkbox />
+                <Checkbox {...form.register("proPapper")} />
                 Photos imprimées sur papier professionnel
               </div>
             </div>
@@ -203,4 +277,14 @@ const SideInfo = () => {
       </div>
     </div>
   )
+}
+
+export const intl = {
+  en: {},
+  fr: {
+    "step2.title": "Sélectionnez le plan",
+    "step2.items1.1": "Une photo numérique (email)",
+    "step2.items1.2": "Une plaquette numérique de vos photos (email)",
+  },
+  ar: {},
 }

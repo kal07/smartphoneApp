@@ -1,93 +1,29 @@
 import React from "react"
-import { useQuery } from "@tanstack/react-query"
 import { useIntl } from "react-intl"
 import { QRCode } from "react-qrcode-logo"
-import { useNavigate, useParams } from "react-router-dom"
 
 import check from "@/assets/check-white.svg"
+import gif from "@/assets/gif desktop.gif"
 import logo from "@/assets/logo.png"
 import img from "@/assets/step1-img.png"
+import { Spinner } from "@/components/Spinner"
 import { useStep } from "@/context/useStep"
-import { usePrice } from "@/hooks/usePrice"
-
-// import { Check } from "lucide-react"
+import { useCheckQrCode } from "@/hooks/useCheckQrCode"
+import { useGetQrCode } from "@/hooks/useGetQrCode"
 
 export function Step1() {
-  const navigate = useNavigate()
-
   const setStep = useStep((state) => state.setStep)
   React.useEffect(() => {
     setStep(1)
   }, [setStep])
-  const { price_id } = useParams()
-  const { data } = usePrice()
-
-  const {
-    data: generatedQrcodeData,
-    isLoading: isLoading_generatedQrcode,
-    // isError: isError_qrcode,
-  } = useQuery({
-    queryKey: ["qrcode"],
-    queryFn: async () => {
-      const url = data?.result?.purpose?.signature_needed
-        ? `https://smartphoneid-api--test-2yx5ebbula-ew.a.run.app/service/photo-signature-qrcode-request/${price_id}`
-        : `https://smartphoneid-api--test-2yx5ebbula-ew.a.run.app/service/photo-qrcode-request/${price_id}`
-      const res = await fetch(url).then((res) => res.json())
-      const params = data?.result.purpose?.signature_needed
-      const formattedRes = {
-        qrCode_check_url:
-          `https://192.168.52.36:5173/` +
-          (res.qrCode_check_url as string).slice(55) +
-          `${params ? "?signature=true" : ""}`,
-        uid: res.uid,
-      }
-      return formattedRes
-    },
-    enabled: !!data,
-  })
-
-  const { data: data_qrcode } = useQuery({
-    queryKey: ["qrcode"],
-    queryFn: async () => {
-      const res = await fetch(
-        `https://smartphoneid-api--test-2yx5ebbula-ew.a.run.app/service/qrcode-check/${generatedQrcodeData?.uid}`
-      ).then((res) => res.json())
-      return res
-    },
-    refetchInterval: 1000 * 5,
-    enabled: !!generatedQrcodeData,
-  })
-
-  const firstCondition = data_qrcode?.needPhoto && !!data_qrcode?.photoUrl
-  const secondCondition = data_qrcode?.needSignature
-    ? !!data_qrcode?.signatureUrl
-    : true
-
-  useQuery({
-    queryKey: ["qrcodeConsumed"],
-    queryFn: async () => {
-      const res = await fetch(
-        `https://smartphoneid-api--test-2yx5ebbula-ew.a.run.app/service/qrcode-consumed/${generatedQrcodeData?.uid}`
-      ).then((res) => res.json())
-      return res
-    },
-    enabled: !!data_qrcode && firstCondition && secondCondition,
-  })
-
-  React.useEffect(() => {
-    if (data_qrcode) {
-      if (firstCondition && secondCondition) {
-        navigate(`./${generatedQrcodeData?.uid}/step2`)
-      }
-    }
-  }, [data_qrcode, navigate, generatedQrcodeData?.uid])
-
+  const qrcode = useGetQrCode()
+  const checkedQrcode = useCheckQrCode(qrcode.data)
   return (
     <>
       <div className=" flex flex-1 grow-[3] items-center justify-center">
         <SmartPhoneQrCode
-          url={generatedQrcodeData?.qrCode_check_url}
-          isLoading={isLoading_generatedQrcode}
+          url={qrcode?.data?.qrCode_check_url}
+          checkedQrcode={checkedQrcode.data}
         />
       </div>
       <div className=" flex flex-1 grow-[2] justify-center">
@@ -163,19 +99,19 @@ function SideInfo() {
 
 function SmartPhoneQrCode({
   url,
-  isLoading,
+  checkedQrcode,
 }: {
   url: string | undefined
-  isLoading: boolean
+  checkedQrcode: any
 }) {
   const intl = useIntl()
   return (
-    <div className=" m-auto flex h-full max-w-xs flex-col items-center justify-center gap-6 border ">
+    <div className=" bg-phone m-auto	flex h-full flex-1 flex-col  items-center	justify-center gap-6	border bg-contain bg-center bg-no-repeat p-14 text-center">
       <h3 className=" text-2xl font-bold">
-        {intl.formatMessage({ id: "qrcode title" })}
+        {intl.formatMessage({ id: "Desktop.beforePhotoDesktop.scan_qr" })}
       </h3>
-      {isLoading && <div className="lds-dual-ring"></div>}
-      {!isLoading && (
+      {!url && <Spinner className="h-20 w-20" />}
+      {url && !checkedQrcode?.running && (
         <QRCode
           value={url}
           logoImage={logo}
@@ -185,21 +121,18 @@ function SmartPhoneQrCode({
           size={180}
         />
       )}
-      <a href={url} target="_blank" className=" cursor-pointer underline">
-        {intl.formatMessage({ id: "qrcode " })}
+      {checkedQrcode?.running && <img src={gif} />}
+      <a
+        href={intl.formatMessage({
+          id: "Desktop.beforePhotoDesktop.how_scan_qr_url",
+        })}
+        target="_blank"
+        className="cursor-pointer underline"
+      >
+        {intl.formatMessage({ id: "Desktop.beforePhotoDesktop.how_scan_qr" })}
       </a>
     </div>
   )
 }
 
-export const intl = {
-  en: {},
-  fr: {
-    "step1.title": "Comment réussir <br></br> sa photo d’identité ?",
-    "step1.recommendation.1": "Les lunettes <b>enlevées</b>",
-    "step1.recommendation.2": "Le visage <b>uniformément éclairé</b>",
-    "step1.recommendation.3": "Les cheveux <b>derrière les épaules</b>",
-    "step1.recommendation.4": "La bouche <b>fermée, pas de sourire</b>",
-  },
-  ar: {},
-}
+// service/running-qrcode/:id

@@ -20,22 +20,21 @@ export function Congrat() {
       <div className="flex max-w-3xl flex-1 flex-col rounded-3xl bg-white px-20 py-14 shadow-md max-md:px-8 max-md:py-10 max-sm:px-6">
         <img src={icon_success} alt="" className="m-auto" />
         <h1 className="mb-4 text-4xl font-bold">
-          {intl.formatMessage({ id: "Bravo !" })}
+          {intl.formatMessage({ id: "Desktop.BravoDesktop.felicitation" })}
         </h1>
         <p className="mb-2 font-bold">
-          Vous avez terminé la commande avec succès !
+          {intl.formatMessage({ id: "Desktop.BravoDesktop.text" })}
         </p>
         <p className="m-auto mb-4 max-w-md">
-          Nous avons envoyé un email de confirmation avec les détails de la
-          commande et du paiement à{" "}
+          {intl.formatMessage({ id: "Desktop.BravoDesktop.edit_time" })}
           <span className="font-semibold italic">johndoe@gmail.com</span>.
         </p>
         <p className=" mb-6 text-sm italic text-[#4C4C4C]">
-          Merci de vérifier vos spams si vous ne recevez pas vos photos.
+          {intl.formatMessage({ id: "Desktop.BravoDesktop.check_spam" })}
         </p>
         <Separator className=" m-auto mb-6 h-[2px] max-w-[180px] bg-primary" />
         <p className="m-auto mb-4 max-w-xs">
-          Suivez votre commande en téléchargeant l’application Smartphone iD :
+          {intl.formatMessage({ id: "Desktop.BravoDesktop.download_app" })}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-5">
           <a href={"#"}>
